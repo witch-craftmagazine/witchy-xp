@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Open Graph -->
+  <meta property="og:title" content="Spyglass Tavern">
+  <meta property="og:description" content="Spinny!!">
+  <meta property="og:image" content="https://witch-craftmagazine.github.io/witchy-xp/images/dithered2.png">
+  <meta property="og:url" content="https://witch-craftmagazine.github.io/witchy-xp/spyglass">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Spyglass Tavern">
+  <meta name="twitter:description" content="Spinny!!">
+  <meta name="twitter:image" content="https://witch-craftmagazine.github.io/witchy-xp/images/dithered2.png">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Canvas Export</title>
 <link rel="stylesheet" href="css/styles.css">
 <link rel="preload" href="fonts/craftmine.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="images/spyglass.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/spyglass.png">
 </head>
 <body>
 <div id="bg"></div>
-  <div class="el" style="left:1.05820vw;top:57.44186vh;width:19.31217vw;height:41.86047vh;z-index:1;transform:rotate(0deg) scale(1,1)"><img src="images/book.png" alt=""></div>
-  <div class="el" style="left:0.15344vw;top:2.94419vh;width:28.00000vw;height:49.22791vh;z-index:2;transform:rotate(0deg) scale(1,1)"><img src="images/sign.png" alt=""></div>
-  <div class="el" style="left:82.87038vw;top:85.93024vh;width:5.48942vw;height:9.65116vh;z-index:23;transform:rotate(0deg) scale(1,1)"><img src="images/cod.png" alt=""></div>
-  <div class="el" style="left:78.96826vw;top:23.60465vh;width:8.46561vw;height:14.88372vh;z-index:4;transform:rotate(0deg) scale(1,1)"><img src="images/disc.gif" alt=""></div>
-  <div class="el" style="left:78.76985vw;top:3.02326vh;width:8.46561vw;height:14.88372vh;z-index:5;transform:rotate(0deg) scale(1,1)"><img src="images/nether_star.png" alt=""></div>
-  <div class="el" style="left:74.93387vw;top:85.34884vh;width:5.68783vw;height:10.00000vh;z-index:19;transform:rotate(0deg) scale(1,1)"><img src="images/potato.png" alt=""></div>
-  <div class="el" style="left:22.08995vw;top:64.53488vh;width:8.46561vw;height:14.88372vh;z-index:8;transform:rotate(0deg) scale(1,1)"><img src="images/potion.png" alt=""></div>
-  <div class="el" style="left:64.48413vw;top:83.37209vh;width:8.46561vw;height:14.88372vh;z-index:9;transform:rotate(0deg) scale(1,1)"><img src="images/bookitem.png" alt=""></div>
-  <div class="el" style="left:73.54498vw;top:83.13954vh;width:8.46561vw;height:14.88372vh;z-index:10;transform:rotate(0deg) scale(1,1)"><img src="images/glow_item_frame.png" alt=""></div>
-  <div class="el" style="left:81.54762vw;top:83.13953vh;width:8.46561vw;height:14.88372vh;z-index:11;transform:rotate(0deg) scale(1,1)"><img src="images/item_frame.png" alt=""></div>
-  <div class="el" style="left:22.02381vw;top:82.44186vh;width:8.46561vw;height:14.88372vh;z-index:12;transform:rotate(0deg) scale(1,1)"><img src="images/red_candle.png" alt=""></div>
-  <div class="el" style="left:89.68255vw;top:22.55813vh;width:8.46561vw;height:14.88372vh;z-index:13;transform:rotate(0deg) scale(1,1)"><img src="images/spyglass.png" alt=""></div>
-  <div class="el" style="left:89.74868vw;top:2.79070vh;width:8.46561vw;height:14.88372vh;z-index:14;transform:rotate(0deg) scale(1,1)"><img src="images/clock.gif" alt=""></div>
-  <div class="el" style="left:89.74868vw;top:41.39535vh;width:8.46561vw;height:14.88372vh;z-index:15;transform:rotate(0deg) scale(1,1)"><img src="images/compass.gif" alt=""></div>
-  <div class="el" style="left:90.01323vw;top:59.53488vh;width:8.46561vw;height:14.88372vh;z-index:17;transform:rotate(0deg) scale(1,1)"><img src="images/recovery_compass1.gif" alt=""></div>
+  <div class="img-wrapper" style="left:1.05820vw;top:57.44186vh;width:19.31217vw;height:41.86047vh;z-index:1;transform:rotate(0deg) scale(1,1)"><img src="images/book.png" alt=""></div>
+  <div class="img-wrapper" style="left:0.15344vw;top:2.94419vh;width:28.00000vw;height:49.22791vh;z-index:2;transform:rotate(0deg) scale(1,1)"><img src="images/sign.png" alt=""></div>
+  <div class="img-wrapper" style="left:82.87038vw;top:85.93024vh;width:5.48942vw;height:9.65116vh;z-index:23;transform:rotate(0deg) scale(1,1)"><img src="images/cod.png" alt=""></div>
+  <div class="img-wrapper" style="left:78.96826vw;top:23.60465vh;width:8.46561vw;height:14.88372vh;z-index:4;transform:rotate(0deg) scale(1,1)"><img src="images/disc.gif" alt=""></div>
+  <div class="img-wrapper" style="left:78.76985vw;top:3.02326vh;width:8.46561vw;height:14.88372vh;z-index:5;transform:rotate(0deg) scale(1,1)"><img src="images/nether_star.png" alt=""></div>
+  <div class="img-wrapper" style="left:74.93387vw;top:85.34884vh;width:5.68783vw;height:10.00000vh;z-index:19;transform:rotate(0deg) scale(1,1)"><img src="images/potato.png" alt=""></div>
+  <div class="img-wrapper" style="left:22.08995vw;top:64.53488vh;width:8.46561vw;height:14.88372vh;z-index:8;transform:rotate(0deg) scale(1,1)"><img src="images/potion.png" alt=""></div>
+  <div class="img-wrapper" style="left:64.48413vw;top:83.37209vh;width:8.46561vw;height:14.88372vh;z-index:9;transform:rotate(0deg) scale(1,1)"><img src="images/bookitem.png" alt=""></div>
+  <div class="img-wrapper" style="left:73.54498vw;top:83.13954vh;width:8.46561vw;height:14.88372vh;z-index:10;transform:rotate(0deg) scale(1,1)"><img src="images/glow_item_frame.png" alt=""></div>
+  <div class="img-wrapper" style="left:81.54762vw;top:83.13953vh;width:8.46561vw;height:14.88372vh;z-index:11;transform:rotate(0deg) scale(1,1)"><img src="images/item_frame.png" alt=""></div>
+  <div class="img-wrapper" style="left:22.02381vw;top:82.44186vh;width:8.46561vw;height:14.88372vh;z-index:12;transform:rotate(0deg) scale(1,1)"><img src="images/red_candle.png" alt=""></div>
+  <div class="img-wrapper" style="left:89.68255vw;top:22.55813vh;width:8.46561vw;height:14.88372vh;z-index:13;transform:rotate(0deg) scale(1,1)"><img src="images/spyglass.png" alt=""></div>
+  <div class="img-wrapper" style="left:89.74868vw;top:2.79070vh;width:8.46561vw;height:14.88372vh;z-index:14;transform:rotate(0deg) scale(1,1)"><img src="images/clock.gif" alt=""></div>
+  <div class="img-wrapper" style="left:89.74868vw;top:41.39535vh;width:8.46561vw;height:14.88372vh;z-index:15;transform:rotate(0deg) scale(1,1)"><img src="images/compass.gif" alt=""></div>
+  <div class="img-wrapper" style="left:90.01323vw;top:59.53488vh;width:8.46561vw;height:14.88372vh;z-index:17;transform:rotate(0deg) scale(1,1)"><img src="images/recovery_compass1.gif" alt=""></div>
   <div class="el shape-rect" style="left:3.15344vw;top:23.34884vh;width:22.00000vw;height:25.74419vh;z-index:24;transform:rotate(0deg) scale(1,1)"><div class="el-text">WE WILL MEET AGAIN AT SPYGLASS TAVERN</div></div>
   <div class="el shape-rect" style="left:3.28571vw;top:60.09303vh;width:15.18783vw;height:35.86047vh;z-index:25;transform:rotate(0deg) scale(1,1)"><div class="el-text">STARSWEETPEA'S SECRET DIARY DO NOT READ DO NOT TOUCH ESPECIALLY YOU LINK. dear diary, today I ate a potato.</div></div>
       <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
