@@ -8,32 +8,86 @@
     font-display: swap;
 }
 
-/* ---- Global Styles ---- */
-* {
+/* ---- Variables ---- */
+:root {
+    --canvas-w: 1512px;
+    --canvas-h: 860px;
+    --item-w: 8.5%;
+    --item-h: 15%;
+    --font-main: 'craftmine', Georgia, serif;
+    --bg-color: #888;
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* ---- Viewport ---- */
 body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #888;
-    position: relative;
+    background: var(--bg-color);
 }
 
-/* ---- Background ---- */
+/* ---- Tiled background
+       background-size and background-position are driven by JS
+       so tiles always align with the scaled canvas. ---- */
 #bg {
-    position: absolute;
+    position: fixed;
     inset: 0;
     z-index: 0;
     background-image: url('../images/dithered2.png');
     background-repeat: repeat;
-    background-size: 1512px 860px;
 }
 
-/* ---- Elements ---- */
+/* ---- Fixed-size canvas, scaled + translated by JS ---- */
+#content {
+    position: fixed;
+    width: var(--canvas-w);
+    height: var(--canvas-h);
+    transform-origin: top left;
+    z-index: 2;
+}
+
+/* ---- Reflection strip (visible when canvas doesn't fill viewport height)
+       JS sets top, height, and inner transform each resize. ---- */
+#reflection-wrapper {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    display: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Same background as #bg; JS applies translateY+scaleY(-1) to flip it. */
+#reflection-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-image: url('../images/dithered2.png');
+    background-repeat: repeat;
+    transform-origin: 0 0;
+}
+
+/* Fades the reflection down into the solid bg colour */
+#reflection-fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(136, 136, 136, 0.15) 0%,
+        rgba(136, 136, 136, 0.90) 100%
+    );
+}
+
+/* ---- Image wrappers ---- */
 .img-wrapper {
     position: absolute;
 }
@@ -42,42 +96,107 @@ body {
     width: 100%;
     height: 100%;
     display: block;
+}
+
+/* ---- Spin animation ---- */
+@keyframes spin360 {
+    to { transform: rotate(360deg); }
+}
+
+/* Individual images (opt-in) */
+.img-wrapper.spin:hover img {
+    animation: spin360 0.7s linear;
     transform-origin: center center;
 }
 
-/* ---- Text ---- */
-
-.el {
-    position: absolute; /* or relative if you prefer */
+.group-spin {
+    display: inline-block; /* or block, depending on your layout */
 }
 
-.el-text {
+.group-spin:hover {
+    animation: spin360 0.7s linear;
+    transform-origin: center center;
+}
+
+.group-spin:hover img {
+    animation: none !important;
+}
+
+/* ---- Text elements ---- */
+.el {
     position: absolute;
+}
+
+.sign {
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: left;
+    align-items: flex-start;
     padding: 10px;
-    font-family: 'craftmine', Georgia, serif; /* <-- apply Minecraft font */
-    font-size: clamp(11px, 1.4vw, 17px);
+    font-family: var(--font-main);
+    font-size: 40px;
+    line-height: 1.2;
+    color: #FFFFFF;
+    overflow: hidden;
+}
+
+.el-text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    font-family: var(--font-main);
+    font-size: 17px;
     line-height: 1.55;
-    text-align: block;
     color: #222;
     overflow: hidden;
 }
 
-/* ---- Shapes ---- */
+/* ---- Shape helpers ---- */
+.shape-rect   { border-radius: 0; }
 .shape-circle { border-radius: 50%; }
-.shape-pill { border-radius: 999px; }
-.shape-rect { border-radius: 0; }
+.shape-pill   { border-radius: 999px; }
 
-/* Spin keyframes for full 360 rotation */
-@keyframes spin360 {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* ---- Nav buttons (live inside #content so they scale with it) ---- */
+#nav-buttons {
+    position: absolute;
+    right: 4%;
+    bottom: 4%;
+    display: flex;
+    gap: 30px;
+    z-index: 200;
+    align-items: flex-end;
 }
 
-/* Spin class triggers the animation */
-.img-wrapper img.spin {
-    animation: spin360 1s linear forwards; /* completes full rotation even if hover ends */
+#nav-buttons a {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    width: 70px;
+}
+
+#nav-buttons img {
+    display: block;
+    height: 70px;
+    width: 70px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+#nav-buttons a:hover img {
+    animation: spin360 0.7s linear;
+}
+
+figure {
+    margin: 0;
+    text-align: center;
+}
+
+figcaption {
+    font-family: var(--font-main);
+    text-shadow: 0 0 10px #000;
+    color: #fff;
+    text-align: center;
 }
