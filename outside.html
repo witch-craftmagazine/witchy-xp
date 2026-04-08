@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spyglass Tavern - Outside</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title"        content="Spyglass outside">
+  <meta property="og:description"  content="Spinny!!">
+  <meta property="og:image"        content="https://witch-craftmagazine.github.io/witchy-xp/images/spyglass.png">
+  <meta property="og:url"          content="https://witch-craftmagazine.github.io/witchy-xp/outside">
+  <meta property="og:type"         content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Spyglass outside">
+  <meta name="twitter:description" content="Spinny!!">
+  <meta name="twitter:image"       content="https://witch-craftmagazine.github.io/witchy-xp/images/spyglass.png">
+
+  <!-- Custom Font -->
+  <link rel="preload" href="fonts/craftmine.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    body, html { margin: 0; height: 100%; overflow: hidden; background: black; }
+    #panorama-container { width: 100%; height: 100%; }
+    #toggle-rotation {
+      position: absolute; bottom: 20px; right: 20px;
+      padding: 10px 15px; background: rgba(0,0,0,0.6);
+      color: white; border: none; cursor: pointer;
+      font-size: 14px; border-radius: 5px;
+    }
+    #toggle-rotation:hover { background: rgba(0,0,0,0.8); }
+    
+    /* Arrow buttons */
+    .button-left, .button-right {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.1s;
+  }
+
+  .button-left {
+    left: 10px;
+  }
+
+  .button-right {
+    right: 10px;
+  }
+
+  .button-left img, .button-right img {
+    width: 50px;
+    height: 50px;
+    display: block;
+  }
+
+  /* Shake animation on hover */
+  .button-left:hover, .button-right:hover {
+    animation: shake 0.3s;
+    animation-iteration-count: 1;
+  }
+
+  @keyframes shake {
+    0% { transform: translateY(-50%) translateX(0); }
+    20% { transform: translateY(-50%) translateX(-3px); }
+    40% { transform: translateY(-50%) translateX(3px); }
+    60% { transform: translateY(-50%) translateX(-3px); }
+    80% { transform: translateY(-50%) translateX(3px); }
+    100% { transform: translateY(-50%) translateX(0); }
+  }
+ 
+  </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="panorama-container"></div>
+  
+  
+<a href="https://witch-craftmagazine.github.io/witchy-xp/donkey" class="button-left">
+  <img src="images/left.png" alt="Left Button">
+</a>
+
+<a href="https://witch-craftmagazine.github.io/witchy-xp/tavern" class="button-right">
+  <img src="images/right.png" alt="Right Button">
+</a>
+
+  
+  <button id="toggle-rotation">Pause Rotation</button>
+
+  <script type="module">
+  import * as THREE from 'three';
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.getElementById('panorama-container').appendChild(renderer.domElement);
+
+  const loader = new THREE.CubeTextureLoader();
+  scene.background = loader.load([
+    'panorama/outside/panorama_2.png',
+    'panorama/outside/panorama_0.png',
+    'panorama/outside/panorama_4.png',
+    'panorama/outside/panorama_5.png',
+    'panorama/outside/panorama_1.png',
+    'panorama/outside/panorama_3.png'
+  ]);
+
+  // Track camera angles manually
+  let yaw = 0;    // horizontal
+  let pitch = 0;  // vertical
+
+  let autorotate = true;
+  let isDragging = false;
+  let lastX = 0, lastY = 0;
+
+  const canvas = renderer.domElement;
+
+  canvas.addEventListener('mousedown', e => {
+    isDragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  window.addEventListener('mouseup',   () => isDragging = false);
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    yaw   -= (e.clientX - lastX) * 0.003;
+    pitch -= (e.clientY - lastY) * 0.003;
+    pitch  = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, pitch)); // clamp
+    lastX  = e.clientX;
+    lastY  = e.clientY;
+  });
+
+  // Touch support
+  canvas.addEventListener('touchstart', e => {
+    isDragging = true;
+    lastX = e.touches[0].clientX;
+    lastY = e.touches[0].clientY;
+  });
+  window.addEventListener('touchend',   () => isDragging = false);
+  window.addEventListener('touchmove',  e => {
+    if (!isDragging) return;
+    yaw   -= (e.touches[0].clientX - lastX) * 0.003;
+    pitch -= (e.touches[0].clientY - lastY) * 0.003;
+    pitch  = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, pitch));
+    lastX  = e.touches[0].clientX;
+    lastY  = e.touches[0].clientY;
+  });
+
+  const button = document.getElementById('toggle-rotation');
+  button.addEventListener('click', () => {
+    autorotate = !autorotate;
+    button.textContent = autorotate ? 'Pause Rotation' : 'Resume Rotation';
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    if (autorotate && !isDragging) {
+      yaw -= 0.002;
+    }
+
+    // Apply yaw then pitch using Euler order YXZ (standard for FPS/panorama)
+    camera.rotation.order = 'YXZ';
+    camera.rotation.y = yaw;
+    camera.rotation.x = pitch;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+</body>
+</html>
