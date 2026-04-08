@@ -1,122 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spyglass Tavern</title>
-
-  <!-- Open Graph -->
-  <meta property="og:title"        content="Spyglass Tavern">
-  <meta property="og:description"  content="Spinny!!">
-  <meta property="og:image"        content="https://witch-craftmagazine.github.io/witchy-xp/images/spyglass.png">
-  <meta property="og:url"          content="https://witch-craftmagazine.github.io/witchy-xp/spyglass">
-  <meta property="og:type"         content="website">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="Spyglass Tavern">
-  <meta name="twitter:description" content="Spinny!!">
-  <meta name="twitter:image"       content="https://witch-craftmagazine.github.io/witchy-xp/images/spyglass.png">
-
-  <!-- Custom Font -->
-  <link rel="preload" href="fonts/craftmine.woff2" as="font" type="font/woff2" crossorigin>
-  <style>
-    @font-face {
-      font-family: 'CraftMine';
-      src: url('fonts/craftmine.woff2') format('woff2');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-    body {
-      margin: 0;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'CraftMine', sans-serif;
-    }
-
-    /* Panorama container */
-    #panorama-container {
-      position: relative;
-      width: 80vw;
-      max-width: 800px;
-      cursor: grab;
-    }
-
-    #panorama-container img {
-      width: 100%;
-      display: none;
-      user-select: none;
-    }
-
-    #panorama-container img.active {
-      display: block;
-    }
-  </style>
-
-  <!-- Favicon -->
-  <link rel="icon" href="images/spyglass.png" sizes="32x32">
-  <link rel="apple-touch-icon" href="images/spyglass.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spyglass Tavern</title>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.min.js"></script>
+<style>
+  body, html {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: black;
+  }
+  #panorama-container {
+    width: 100%;
+    height: 100%;
+  }
+  #toggle-rotation {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 14px;
+    border-radius: 5px;
+  }
+  #toggle-rotation:hover {
+    background: rgba(0,0,0,0.8);
+  }
+</style>
 </head>
 <body>
-
-<div id="panorama-container">
-  <img src="panorama/tavern/panorama_0.png" class="active" alt="Spyglass Tavern Panorama 0">
-  <img src="panorama/tavern/panorama_1.png" alt="Spyglass Tavern Panorama 1">
-  <img src="panorama/tavern/panorama_2.png" alt="Spyglass Tavern Panorama 2">
-  <img src="panorama/tavern/panorama_3.png" alt="Spyglass Tavern Panorama 3">
-  <img src="panorama/tavern/panorama_4.png" alt="Spyglass Tavern Panorama 4">
-  <img src="panorama/tavern/panorama_5.png" alt="Spyglass Tavern Panorama 5">
-</div>
+<div id="panorama-container"></div>
+<button id="toggle-rotation">Pause Rotation</button>
 
 <script>
-const container = document.getElementById('panorama-container');
-const images = container.querySelectorAll('img');
-let current = 0;
+  // Scene, Camera, Renderer
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.getElementById('panorama-container').appendChild(renderer.domElement);
 
-// Auto-rotate panorama every 500ms
-let interval = setInterval(() => {
-  images[current].classList.remove('active');
-  current = (current + 1) % images.length;
-  images[current].classList.add('active');
-}, 500);
+  // Load Panorama Textures
+  const loader = new THREE.TextureLoader();
+  const texturePaths = [
+    'panorama/tavern/panorama_0.png', // px
+    'panorama/tavern/panorama_1.png', // nx
+    'panorama/tavern/panorama_2.png', // py
+    'panorama/tavern/panorama_3.png', // ny
+    'panorama/tavern/panorama_4.png', // pz
+    'panorama/tavern/panorama_5.png', // nz
+  ];
 
-// Drag to rotate manually
-let isDragging = false;
-let startX = 0;
+  const materials = texturePaths.map(path => {
+    return new THREE.MeshBasicMaterial({
+      map: loader.load(path),
+      side: THREE.BackSide
+    });
+  });
 
-container.addEventListener('mousedown', e => {
-  isDragging = true;
-  startX = e.clientX;
-  clearInterval(interval); // stop auto-rotate while dragging
-});
+  const geometry = new THREE.BoxGeometry(500, 500, 500);
+  const cube = new THREE.Mesh(geometry, materials);
+  scene.add(cube);
 
-container.addEventListener('mouseup', e => {
-  isDragging = false;
-  interval = setInterval(() => { // resume auto-rotate
-    images[current].classList.remove('active');
-    current = (current + 1) % images.length;
-    images[current].classList.add('active');
-  }, 500);
-});
+  camera.position.set(0, 0, 0);
 
-container.addEventListener('mouseleave', e => isDragging = false);
+  // OrbitControls for mouse look
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = false;
+  controls.enablePan = false;
+  controls.rotateSpeed = 0.5;
 
-container.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  let delta = e.clientX - startX;
-  if (Math.abs(delta) > 20) {
-    images[current].classList.remove('active');
-    current = (delta > 0) ? (current - 1 + images.length) % images.length
-                          : (current + 1) % images.length;
-    images[current].classList.add('active');
-    startX = e.clientX;
+  let autorotate = true;
+
+  // Button toggle
+  const button = document.getElementById('toggle-rotation');
+  button.addEventListener('click', () => {
+    autorotate = !autorotate;
+    button.textContent = autorotate ? 'Pause Rotation' : 'Resume Rotation';
+  });
+
+  // Animate
+  function animate() {
+    requestAnimationFrame(animate);
+    if (autorotate) {
+      cube.rotation.y += 0.001; // slow rotation
+    }
+    controls.update();
+    renderer.render(scene, camera);
   }
-});
-</script>
 
+  animate();
+
+  // Responsive
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
 </body>
 </html>
