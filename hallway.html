@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spyglass Tavern</title>
+  <title>Spyglass Tavern - Hallway</title>
 
   <!-- Open Graph -->
   <meta property="og:title"        content="Spyglass Tavern">
   <meta property="og:description"  content="Spinny!!">
   <meta property="og:image"        content="https://witch-craftmagazine.github.io/witchy-xp/images/spyglass.png">
-  <meta property="og:url"          content="https://witch-craftmagazine.github.io/witchy-xp/tavern">
+  <meta property="og:url"          content="https://witch-craftmagazine.github.io/witchy-xp/hallway">
   <meta property="og:type"         content="website">
 
   <!-- Twitter Card -->
@@ -21,7 +21,7 @@
   <!-- Custom Font -->
   <link rel="preload" href="fonts/craftmine.woff2" as="font" type="font/woff2" crossorigin>
 
-  <style>
+   <style>
     body, html { margin: 0; height: 100%; overflow: hidden; background: black; }
     #panorama-container { width: 100%; height: 100%; }
     #toggle-rotation {
@@ -89,14 +89,13 @@
   <div id="panorama-container"></div>
   
   
-<a href="https://witch-craftmagazine.github.io/witchy-xp/outside" class="button-left">
+<a href="https://witch-craftmagazine.github.io/witchy-xp/tavern" class="button-left">
   <img src="images/left.png" alt="Left Button">
 </a>
 
-<a href="https://witch-craftmagazine.github.io/witchy-xp/hallway" class="button-right">
+<a href="https://witch-craftmagazine.github.io/witchy-xp/axo" class="button-right">
   <img src="images/right.png" alt="Right Button">
 </a>
-
   
   <button id="toggle-rotation">Pause Rotation</button>
 
@@ -112,12 +111,12 @@
 
   const loader = new THREE.CubeTextureLoader();
   scene.background = loader.load([
-    'panorama/tavern/panorama_2.png',
-    'panorama/tavern/panorama_0.png',
-    'panorama/tavern/panorama_4.png',
-    'panorama/tavern/panorama_5.png',
-    'panorama/tavern/panorama_1.png',
-    'panorama/tavern/panorama_3.png'
+    'panorama/hallway/panorama_2.png',
+    'panorama/hallway/panorama_0.png',
+    'panorama/hallway/panorama_4.png',
+    'panorama/hallway/panorama_5.png',
+    'panorama/hallway/panorama_1.png',
+    'panorama/hallway/panorama_3.png'
   ]);
 
   // Track camera angles manually
