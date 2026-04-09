@@ -7,7 +7,6 @@ on:
 jobs:
   sitemap_job:
     runs-on: ubuntu-latest
-    name: Generate a sitemap
 
     steps:
     - name: Checkout the repo
@@ -20,6 +19,14 @@ jobs:
       uses: cicirello/generate-sitemap@v1
       with:
         base-url-path: https://witch-craftmagazine.github.io/witchy-xp
+
+    - name: Commit sitemap
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add ${{ steps.sitemap.outputs.sitemap-path }}
+        git commit -m "Update sitemap" || echo "No changes to commit"
+        git push
 
     - name: Output stats
       run: |
