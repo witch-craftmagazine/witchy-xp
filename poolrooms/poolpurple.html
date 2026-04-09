@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link's Lab</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title"        content="P O O L R O O M S">
+  <meta property="og:description"  content="wet world">
+  <meta property="og:image"        content="https://witch-craftmagazine.github.io/witchy-xp/lab/images/cod.png">
+  <meta property="og:url"          content="https://witch-craftmagazine.github.io/witchy-xp/lab/lab">
+  <meta property="og:type"         content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="P O O L R O O M S">
+  <meta name="twitter:description" content="wet world">
+  <meta name="twitter:image"       content="https://witch-craftmagazine.github.io/witchy-xp/lab/images/cod.png">
+
+  <!-- Custom Font -->
+  <link rel="preload" href="fonts/craftmine.woff2" as="font" type="font/woff2" crossorigin>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+    }
+  }
+  </script>
+
+<link rel="stylesheet" href="../css/poolstyle.css">
+</head>
+<body>
+
+  <div id="panorama-container"></div>
+
+  <!-- Security cam layers -->
+  <div id="cam-tint"></div>
+  <div id="scanlines"></div>
+  <div id="grain"></div>
+  <div id="vignette"></div>
+  <div id="glitch-overlay"></div>
+  <div id="static-burst"></div>
+
+  <!-- HUD -->
+  <div id="cam-hud">
+    <div class="cam-label">
+      <!--
+        ══════════════════════════════════════════
+        CUSTOMISE PER ROOM:
+        Change CAM-01 / TAVERN to match your room.
+        ══════════════════════════════════════════
+      -->
+      <span>CAM-01</span>
+      <span>FALL</span>
+    </div>
+    <div class="rec-badge">
+      <div class="rec-dot"></div>
+      <span>REC</span>
+    </div>
+  </div>
+
+  <div id="cam-timestamp">--:--:-- ----/--/--</div>
+
+  <!-- Controls -->
+  <button id="toggle-rotation">⏸ PAUSE</button>
+
+  <!--
+    ══════════════════════════════════════════════════════════════════
+    DUNGEON MAP — bottom-right corner
+    ──────────────────────────────────────────────────────────────────
+    HOW TO CUSTOMISE PER ROOM:
+    1. Add/remove <a class="map-room"> nodes (copy an existing one).
+    2. Adjust x/y/width/height on each <rect> to lay out the map.
+    3. Update each <text> label and href.
+    4. Add class="current" to THIS room's node.
+    5. Update <line> / <polyline> connector coordinates to match.
+
+    ROOM NODE ANATOMY:
+      x, y   = top-left corner of the room box (in SVG units)
+      width  = box width  (label fits ~9 chars at width=54)
+      height = box height (18 is standard)
+
+    CONNECTOR ANATOMY:
+      x1,y1 = start point  (usually the edge midpoint of one room)
+      x2,y2 = end point    (usually the edge midpoint of the next room)
+      Use <polyline points="x1,y1 mx,my x2,y2"> for L-shaped bends.
+    ══════════════════════════════════════════════════════════════════
+  -->
+  <div id="dungeon-map">
+    <div class="map-heading">// MAP</div>
+<svg width="400" height="100" viewBox="0 0 400 100">
+  <defs>
+    <linearGradient id="roomGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color: rgba(100, 200, 255, 0.9); stop-opacity: 1"/>
+      <stop offset="100%" style="stop-color: rgba(70, 150, 220, 0.8); stop-opacity: 1"/>
+    </linearGradient>
+    <linearGradient id="roomGradientHover" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color: rgba(150, 220, 255, 1); stop-opacity: 1"/>
+      <stop offset="100%" style="stop-color: rgba(100, 190, 255, 0.95); stop-opacity: 1"/>
+    </linearGradient>
+    <filter id="glossShine">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1"/>
+    </filter>
+  </defs>
+
+  <!-- ══ TOP CONNECTORS ══ -->
+    <!-- ══ CONNECTIONS ══ -->
+  <!-- Top row: ROOM → FALL → PURPLE → ROOM 2 -->
+  <line class="map-connector" x1="88" y1="12" x2="140" y2="12"/>
+  <line class="map-connector" x1="196" y1="12" x2="252" y2="12"/>
+  <line class="map-connector" x1="308" y1="12" x2="320" y2="12"/>
+  
+  <!-- ROOM → SLIDE (vertical connection) -->
+  <line class="map-connector" x1="60" y1="20" x2="60" y2="48"/>
+  <line class="map-connector" x1="60" y1="48" x2="100" y2="48"/>
+  <line class="map-connector" x1="100" y1="48" x2="100" y2="76"/>
+  
+  <!-- FALL → STAIR (vertical connection) -->
+  <line class="map-connector" x1="168" y1="20" x2="168" y2="48"/>
+  <line class="map-connector" x1="168" y1="48" x2="180" y2="48"/>
+  <line class="map-connector" x1="180" y1="48" x2="180" y2="76"/>
+  
+  <!-- PURPLE → STAIR 2 (vertical connection) -->
+  <line class="map-connector" x1="280" y1="20" x2="280" y2="48"/>
+  <line class="map-connector" x1="280" y1="48" x2="260" y2="48"/>
+  <line class="map-connector" x1="260" y1="48" x2="260" y2="76"/>
+  
+  <!-- Middle row: SLIDE → STAIR → STAIR 2 -->
+  <line class="map-connector" x1="128" y1="84" x2="152" y2="84"/>
+  <line class="map-connector" x1="208" y1="84" x2="232" y2="84"/>
+ 
+  <!-- ══ TOP ROW ROOMS ══ -->
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolroom">
+    <rect x="32" y="4" width="56" height="16" rx="3"/>
+    <text x="60" y="12">ROOM</text>
+  </a>
+ 
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolfall">
+    <rect x="140" y="4" width="56" height="16" rx="3"/>
+    <text x="168" y="12">FALL</text>
+  </a>
+ 
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolpurple">
+    <rect x="252" y="4" width="56" height="16" rx="3"/>
+    <text x="280" y="12">PURPLE</text>
+  </a>
+ 
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolroom2">
+    <rect x="320" y="4" width="56" height="16" rx="3"/>
+    <text x="348" y="12">ROOM 2</text>
+  </a>
+ 
+  <!-- ══ MIDDLE ROW ROOMS ══ -->
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolslide">
+    <rect x="72" y="76" width="56" height="16" rx="3"/>
+    <text x="100" y="84">SLIDE</text>
+  </a>
+ 
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolstair">
+    <rect x="152" y="76" width="56" height="16" rx="3"/>
+    <text x="180" y="84">STAIR</text>
+  </a>
+ 
+  <a class="map-room" href="https://witch-craftmagazine.github.io/witchy-xp/poolrooms/poolstair2">
+    <rect x="232" y="76" width="56" height="16" rx="3"/>
+    <text x="260" y="84">STAIR 2</text>
+  </a>
+
+</svg>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    /* ── Three.js panorama setup ────────────────────────────────────── */
+    const scene    = new THREE.Scene();
+    const camera   = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    document.getElementById('panorama-container').appendChild(renderer.domElement);
+
+    /*
+      ══════════════════════════════════════════
+      CUSTOMISE PER ROOM: update panorama folder/filenames.
+      ══════════════════════════════════════════
+    */
+    const loader = new THREE.CubeTextureLoader();
+    scene.background = loader.load([
+      '../panorama/poolrooms/poolpurple/panorama_2.webp',
+      '../panorama/poolrooms/poolpurple/panorama_0.webp',
+      '../panorama/poolrooms/poolpurple/panorama_4.webp',
+      '../panorama/poolrooms/poolpurple/panorama_5.webp',
+      '../panorama/poolrooms/poolpurple/panorama_1.webp',
+      '../panorama/poolrooms/poolpurple/panorama_3.webp'
+    ]);
+
+    let yaw = 0, pitch = 0;
+    let autorotate = true;
+    let isDragging = false;
+    let lastX = 0, lastY = 0;
+
+    const canvas = renderer.domElement;
+
+    canvas.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
+    window.addEventListener('mouseup',   () => isDragging = false);
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      yaw   -= (e.clientX - lastX) * 0.003;
+      pitch -= (e.clientY - lastY) * 0.003;
+      pitch  = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, pitch));
+      lastX = e.clientX; lastY = e.clientY;
+    });
+
+    canvas.addEventListener('touchstart', e => { isDragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; });
+    window.addEventListener('touchend',   () => isDragging = false);
+    window.addEventListener('touchmove',  e => {
+      if (!isDragging) return;
+      yaw   -= (e.touches[0].clientX - lastX) * 0.003;
+      pitch -= (e.touches[0].clientY - lastY) * 0.003;
+      pitch  = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, pitch));
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    });
+
+    const rotBtn = document.getElementById('toggle-rotation');
+    rotBtn.addEventListener('click', () => {
+      autorotate = !autorotate;
+      rotBtn.textContent = autorotate ? '⏸ PAUSE' : '▶ RESUME';
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (autorotate && !isDragging) yaw -= 0.002;
+      camera.rotation.order = 'YXZ';
+      camera.rotation.y = yaw;
+      camera.rotation.x = pitch;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    /* ── Timestamp HUD ──────────────────────────────────────────────── */
+    const tsEl = document.getElementById('cam-timestamp');
+    function updateTimestamp() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2,'0');
+      const mm = String(now.getMinutes()).padStart(2,'0');
+      const ss = String(now.getSeconds()).padStart(2,'0');
+      const yyyy = now.getFullYear();
+      const mo = String(now.getMonth()+1).padStart(2,'0');
+      const dd = String(now.getDate()).padStart(2,'0');
+      tsEl.textContent = `${hh}:${mm}:${ss}  ${yyyy}/${mo}/${dd}`;
+    }
+    updateTimestamp();
+    setInterval(updateTimestamp, 1000);
+
+    /* ── Glitch Engine ──────────────────────────────────────────────── */
+    const glitchEl  = document.getElementById('glitch-overlay');
+    const burstEl   = document.getElementById('static-burst');
+    const scanEl    = document.getElementById('scanlines');
+
+    // Random range helper
+    const rnd = (min, max) => Math.random() * (max - min) + min;
+
+    function rgbStripe() {
+      // Quick horizontal colour-offset stripe
+      const y   = Math.floor(rnd(0, 100));
+      const h   = Math.floor(rnd(2, 18));
+      const col = `rgba(${Math.random()>0.5?'255,0,80':'0,255,80'},0.15)`;
+      glitchEl.style.background = `linear-gradient(transparent ${y}%, ${col} ${y}%, ${col} ${y+h}%, transparent ${y+h}%)`;
+    }
+
+    function horizontalTear() {
+      // Multiple stripe tears
+      const stops = [];
+      const count = Math.floor(rnd(2, 5));
+      for (let i = 0; i < count; i++) {
+        const y  = Math.floor(rnd(0, 95));
+        const h  = Math.floor(rnd(1, 6));
+        const c  = `rgba(255,255,255,${rnd(0.03,0.12)})`;
+        stops.push(`transparent ${y}%`, `${c} ${y}%`, `${c} ${y+h}%`, `transparent ${y+h}%`);
+      }
+      glitchEl.style.background = `linear-gradient(${stops.join(',')})`;
+    }
+
+    function staticBurst() {
+      // Full-frame white flash
+      burstEl.style.opacity = rnd(0.05, 0.25);
+      burstEl.style.transition = 'opacity 0.04s';
+      setTimeout(() => { burstEl.style.opacity = 0; }, 60);
+    }
+
+    function scanlineShift() {
+      // Momentarily compress scanlines for a "roll" effect
+      scanEl.style.backgroundSize = `100% ${Math.floor(rnd(40,120))}px`;
+      setTimeout(() => { scanEl.style.backgroundSize = ''; }, rnd(80,200));
+    }
+
+    function doGlitch() {
+      const type = Math.random();
+      glitchEl.classList.add('active');
+
+      if (type < 0.4)       rgbStripe();
+      else if (type < 0.75) horizontalTear();
+      else                  rgbStripe(), horizontalTear(); // combo
+
+      if (Math.random() < 0.3) staticBurst();
+      if (Math.random() < 0.25) scanlineShift();
+
+      const duration = rnd(40, 180);
+      setTimeout(() => {
+        glitchEl.classList.remove('active');
+        glitchEl.style.background = 'transparent';
+      }, duration);
+
+      // Sometimes trigger a rapid second hit
+      if (Math.random() < 0.35) {
+        setTimeout(doGlitch, rnd(duration + 30, duration + 200));
+      }
+    }
+
+    function scheduleGlitch() {
+      const delay = rnd(2500, 9000);
+      setTimeout(() => { doGlitch(); scheduleGlitch(); }, delay);
+    }
+    scheduleGlitch();
+
+    /* ── Dungeon map needs no JS — it's always visible ─────────────── */
+  </script>
+</body>
+</html>
