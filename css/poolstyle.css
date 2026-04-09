@@ -1,446 +1,446 @@
-      @font-face {
-        font-family: "craftmine";
-        src:
-          url("../fonts/craftmine.woff2") format("woff2"),
-          url("../fonts/craftmine.woff") format("woff");
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
-      /* ─── Reset & Base ─────────────────────────────────────────────── */
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body,
-      html {
-        height: 100%;
-        overflow: hidden;
-        background: black;
-        font-family: "craftmine", Georgia, serif;
-      }
-
-      #panorama-container {
-        width: 100%;
-        height: 100%;
-      }
-
-      /* ─── Light Glass Tint (very subtle) ───────────────────── */
-      /* ─── Light Glass Tint (very subtle) ───────────────────── */
-      #cam-tint {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 10;
-        overflow: hidden; /* prevents bleed */
-
-        background: linear-gradient(
-          to bottom,
-          rgba(180, 230, 255, 0.12),
-          rgba(120, 200, 255, 0.08),
-          rgba(200, 255, 240, 0.1)
-        );
-
-        /* stays INSIDE the block */
-        backdrop-filter: saturate(110%);
-      }
-
-      /* pseudo element must be OUTSIDE the main block */
-      #cam-tint::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-
-        background:
-          linear-gradient(to right, rgba(255, 0, 0, 0.05), transparent),
-          linear-gradient(to left, rgba(0, 0, 255, 0.05), transparent);
-
-        mix-blend-mode: screen;
-        pointer-events: none;
-      }
-
-      /* ─── Soft Light Lines (barely there) ─────────────────── */
-      #scanlines {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 11;
-
-        background: repeating-linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.08) 0px,
-          rgba(0, 0, 0, 0.08) 1px,
-          transparent 1px,
-          transparent 3px
-        );
-
-        opacity: 0.25;
-        mix-blend-mode: multiply;
-
-        animation: vhs-scan 6s linear infinite;
-        filter: blur(0.3px); /* softens the lines */
-      }
-
-      @keyframes vhs-scan {
-        0% {
-          transform: translateY(0);
-        }
-        100% {
-          transform: translateY(6px);
-        }
-      }
-
-      /* ─── Ultra-subtle Grain ─────────────────────────────── */
-      #grain {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 12;
-
-        opacity: 0.015; /* MUCH lower */
-        background-image: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.2) 1px,
-          transparent 1px
-        );
-        background-size: 6px 6px;
-      }
-
-      /* ─── Minimal Vignette (barely visible) ──────────────── */
-      #vignette {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 13;
-
-        background: radial-gradient(
-          ellipse at center,
-          transparent 70%,
-          rgba(120, 160, 220, 0.08) 100%
-        );
-      }
-
-      /* ─── Soft Shine (not glitchy anymore) ──────────────── */
-      #glitch-overlay {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 14;
-        opacity: 0;
-
-        mix-blend-mode: screen;
-        transition: opacity 0.1s;
-
-        background: repeating-linear-gradient(
-          to bottom,
-          transparent 0px,
-          transparent 40px,
-          rgba(255, 255, 255, 0.08) 41px,
-          transparent 42px
-        );
-      }
-
-      #glitch-overlay.active {
-        opacity: 0.4;
-        animation: vhs-glitch 0.2s steps(2) infinite;
-      }
-
-      @keyframes vhs-glitch {
-        0% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(-6px);
-        }
-        50% {
-          transform: translateX(4px);
-        }
-        75% {
-          transform: translateX(-2px);
-        }
-        100% {
-          transform: translateX(0);
-        }
-      }
-
-      #tracking-bar {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 15;
-
-        background: linear-gradient(
-          to bottom,
-          transparent 0%,
-          rgba(255, 255, 255, 0.15) 48%,
-          rgba(255, 255, 255, 0.25) 50%,
-          rgba(255, 255, 255, 0.15) 52%,
-          transparent 100%
-        );
-
-        opacity: 0;
-      }
-
-      #tracking-bar.active {
-        opacity: 0.6;
-        animation: tracking-roll 1.2s linear infinite;
-      }
-
-      @keyframes tracking-roll {
-        0% {
-          transform: translateY(-100%);
-        }
-        100% {
-          transform: translateY(100%);
-        }
-      }
-
-      /* ─── HUD (now glass UI) ───────────────────────────────── */
-      #cam-hud {
-        position: fixed;
-        top: 12px;
-        left: 12px;
-        right: 12px;
-        z-index: 20;
-
-        padding: 12px 18px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        pointer-events: none;
-
-        color: #eaf6ff;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 14px;
-        backdrop-filter: blur(12px);
-        box-shadow:
-          inset 0 1px 4px rgba(255, 255, 255, 0.5),
-          0 8px 20px rgba(0, 120, 255, 0.25);
-      }
-
-      /* Label */
-      #cam-hud .cam-label span {
-        display: block;
-        opacity: 0.85;
-      }
-
-      /* REC badge → becomes status bubble */
-      #cam-hud .rec-badge {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        color: #ffffff;
-        background: linear-gradient(
-          to bottom,
-          rgba(120, 220, 255, 0.8),
-          rgba(80, 180, 255, 0.6)
-        );
-
-        padding: 6px 10px;
-        border-radius: 999px;
-
-        box-shadow: 0 0 10px rgba(100, 200, 255, 0.6);
-      }
-
-      #cam-hud .rec-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-
-        background: #ffffff;
-        box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-
-        animation: pulse 2s ease-in-out infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-        50% {
-          transform: scale(1.5);
-          opacity: 0.6;
-        }
-      }
-
-      /* ─── Timestamp ───────────────────────────────────────── */
-      #cam-timestamp {
-        position: fixed;
-        bottom: 70px;
-        left: 18px;
-
-        z-index: 20;
-        pointer-events: none;
-
-        color: rgba(255, 255, 255, 0.85);
-        font-size: 12px;
-
-        background: rgba(255, 255, 255, 0.15);
-        padding: 6px 12px;
-        border-radius: 10px;
-
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 12px rgba(0, 120, 255, 0.25);
-      }
-
-      /* ─── Button (Frutiger Aero glass button) ─────────────── */
-      #toggle-rotation {
-        position: fixed;
-        bottom: 20px;
-        left: 18px;
-        z-index: 30;
-
-        padding: 10px 16px;
-
-        color: white;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-
-        background: linear-gradient(
-          to bottom,
-          rgba(160, 220, 255, 0.9),
-          rgba(80, 170, 255, 0.8)
-        );
-
-        border: none;
-        border-radius: 14px;
-
-        box-shadow:
-          inset 0 2px 6px rgba(255, 255, 255, 0.6),
-          0 6px 16px rgba(0, 120, 255, 0.35);
-
-        backdrop-filter: blur(8px);
-        cursor: pointer;
-
-        transition: all 0.25s ease;
-      }
-
-      #toggle-rotation:hover {
-        transform: translateY(-2px);
-        box-shadow:
-          inset 0 2px 8px rgba(255, 255, 255, 0.8),
-          0 10px 24px rgba(0, 140, 255, 0.45);
-      }
-
-      /* ─── Dungeon Map (Frutiger Aero Theme) ───────────────────────── */
-      #dungeon-map {
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
-        z-index: 30;
-        background: linear-gradient(
-          135deg,
-          rgba(200, 230, 255, 0.95) 0%,
-          rgba(150, 200, 255, 0.9) 100%
-        );
-        border: 2px solid rgba(255, 255, 255, 0.7);
-        border-radius: 16px;
-        padding: 14px 14px 12px;
-        backdrop-filter: blur(8px);
-        box-shadow:
-          0 8px 24px rgba(100, 150, 255, 0.25),
-          0 4px 12px rgba(100, 150, 255, 0.15),
-          inset 0 1px 0 rgba(255, 255, 255, 0.6),
-          inset 0 -1px 2px rgba(0, 0, 0, 0.1);
-      }
-
-      #dungeon-map .map-heading {
-        color: rgba(80, 120, 180, 0.8);
-        font-size: 10px;
-        font-family: "Frutiger", "Segoe UI", sans-serif;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
-        margin-bottom: 10px;
-        text-align: center;
-      }
-
-      /* The SVG itself — room rects are <a> wrapped for clicking */
-      #dungeon-map svg {
-        display: block;
-        overflow: visible;
-      }
-
-      /* NEW */
-
-      .map-connector {
-        stroke: rgba(100, 180, 255, 0.4);
-        stroke-width: 2;
-        stroke-linecap: round;
-        fill: none;
-      }
-
-      .map-room {
-        cursor: pointer;
-        text-decoration: none;
-      }
-
-      .map-room rect {
-        fill: url(#roomGradient);
-        stroke: rgba(255, 255, 255, 0.6);
-        stroke-width: 1.5;
-        rx: 8;
-        ry: 8;
-        transition: all 0.2s ease;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))
-          drop-shadow(0 0 1px rgba(255, 255, 255, 0.3));
-      }
-
-      .map-room:hover rect {
-        fill: url(#roomGradientHover);
-        stroke: rgba(255, 255, 255, 0.9);
-        stroke-width: 2;
-        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))
-          drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
-      }
-
-      .map-room text {
-        fill: white;
-        font-family: "Frutiger", "Segoe UI", sans-serif;
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-anchor: middle;
-        dominant-baseline: middle;
-        pointer-events: none;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-      }
-
-      .map-room:hover text {
-        fill: white;
-        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
-      }
-
-      .map-room.current rect {
-        fill: url(#roomGradientHover);
-        stroke: rgba(255, 255, 255, 1);
-        stroke-width: 2.5;
-        filter: drop-shadow(0 8px 16px rgba(100, 150, 255, 0.4))
-          drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
-      }
-
-      .map-room.current text {
-        fill: white;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      /* ─── Static burst flash ────────────────────────────────────────── */
-      #static-burst {
-        position: fixed;
-        inset: 0;
-        z-index: 25;
-        pointer-events: none;
-        opacity: 0;
-        background: white;
-      }
+@font-face {
+  font-family: "craftmine";
+  src:
+    url("../fonts/craftmine.woff2") format("woff2"),
+    url("../fonts/craftmine.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+/* ─── Reset & Base ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body,
+html {
+  height: 100%;
+  overflow: hidden;
+  background: black;
+  font-family: "craftmine", Georgia, serif;
+}
+
+#panorama-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Light Glass Tint (very subtle) ───────────────────── */
+/* ─── Light Glass Tint (very subtle) ───────────────────── */
+#cam-tint {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden; /* prevents bleed */
+
+  background: linear-gradient(
+    to bottom,
+    rgba(180, 230, 255, 0.12),
+    rgba(120, 200, 255, 0.08),
+    rgba(200, 255, 240, 0.1)
+  );
+
+  /* stays INSIDE the block */
+  backdrop-filter: saturate(110%);
+}
+
+/* pseudo element must be OUTSIDE the main block */
+#cam-tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(to right, rgba(255, 0, 0, 0.05), transparent),
+    linear-gradient(to left, rgba(0, 0, 255, 0.05), transparent);
+
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ─── Soft Light Lines (barely there) ─────────────────── */
+#scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 11;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+
+  animation: vhs-scan 6s linear infinite;
+  filter: blur(0.3px); /* softens the lines */
+}
+
+@keyframes vhs-scan {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(6px);
+  }
+}
+
+/* ─── Ultra-subtle Grain ─────────────────────────────── */
+#grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+
+  opacity: 0.015; /* MUCH lower */
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 1px,
+    transparent 1px
+  );
+  background-size: 6px 6px;
+}
+
+/* ─── Minimal Vignette (barely visible) ──────────────── */
+#vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 13;
+
+  background: radial-gradient(
+    ellipse at center,
+    transparent 70%,
+    rgba(120, 160, 220, 0.08) 100%
+  );
+}
+
+/* ─── Soft Shine (not glitchy anymore) ──────────────── */
+#glitch-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 14;
+  opacity: 0;
+
+  mix-blend-mode: screen;
+  transition: opacity 0.1s;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 40px,
+    rgba(255, 255, 255, 0.08) 41px,
+    transparent 42px
+  );
+}
+
+#glitch-overlay.active {
+  opacity: 0.4;
+  animation: vhs-glitch 0.2s steps(2) infinite;
+}
+
+@keyframes vhs-glitch {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+#tracking-bar {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 48%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 52%,
+    transparent 100%
+  );
+
+  opacity: 0;
+}
+
+#tracking-bar.active {
+  opacity: 0.6;
+  animation: tracking-roll 1.2s linear infinite;
+}
+
+@keyframes tracking-roll {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ─── HUD (now glass UI) ───────────────────────────────── */
+#cam-hud {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 20;
+
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  pointer-events: none;
+
+  color: #eaf6ff;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.5),
+    0 8px 20px rgba(0, 120, 255, 0.25);
+}
+
+/* Label */
+#cam-hud .cam-label span {
+  display: block;
+  opacity: 0.85;
+}
+
+/* REC badge → becomes status bubble */
+#cam-hud .rec-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #ffffff;
+  background: linear-gradient(
+    to bottom,
+    rgba(120, 220, 255, 0.8),
+    rgba(80, 180, 255, 0.6)
+  );
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  box-shadow: 0 0 10px rgba(100, 200, 255, 0.6);
+}
+
+#cam-hud .rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.6;
+  }
+}
+
+/* ─── Timestamp ───────────────────────────────────────── */
+#cam-timestamp {
+  position: fixed;
+  bottom: 70px;
+  left: 18px;
+
+  z-index: 20;
+  pointer-events: none;
+
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 12px;
+  border-radius: 10px;
+
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 120, 255, 0.25);
+}
+
+/* ─── Button (Frutiger Aero glass button) ─────────────── */
+#toggle-rotation {
+  position: fixed;
+  bottom: 20px;
+  left: 18px;
+  z-index: 30;
+
+  padding: 10px 16px;
+
+  color: white;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(160, 220, 255, 0.9),
+    rgba(80, 170, 255, 0.8)
+  );
+
+  border: none;
+  border-radius: 14px;
+
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.6),
+    0 6px 16px rgba(0, 120, 255, 0.35);
+
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+#toggle-rotation:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 2px 8px rgba(255, 255, 255, 0.8),
+    0 10px 24px rgba(0, 140, 255, 0.45);
+}
+
+/* ─── Dungeon Map (Frutiger Aero Theme) ───────────────────────── */
+#dungeon-map {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 30;
+  background: linear-gradient(
+    135deg,
+    rgba(200, 230, 255, 0.95) 0%,
+    rgba(150, 200, 255, 0.9) 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  padding: 14px 14px 12px;
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 8px 24px rgba(100, 150, 255, 0.25),
+    0 4px 12px rgba(100, 150, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#dungeon-map .map-heading {
+  color: rgba(80, 120, 180, 0.8);
+  font-size: 10px;
+  font-family: "Frutiger", "Segoe UI", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* The SVG itself — room rects are <a> wrapped for clicking */
+#dungeon-map svg {
+  display: block;
+  overflow: visible;
+}
+
+/* NEW */
+
+.map-connector {
+  stroke: rgba(100, 180, 255, 0.4);
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.map-room {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.map-room rect {
+  fill: url(#roomGradient);
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 1.5;
+  rx: 8;
+  ry: 8;
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.3));
+}
+
+.map-room:hover rect {
+  fill: url(#roomGradientHover);
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 2;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+
+.map-room text {
+  fill: white;
+  font-family: "Frutiger", "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.map-room:hover text {
+  fill: white;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.map-room.current rect {
+  fill: url(#roomGradientHover);
+  stroke: rgba(255, 255, 255, 1);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 8px 16px rgba(100, 150, 255, 0.4))
+    drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+}
+
+.map-room.current text {
+  fill: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Static burst flash ────────────────────────────────────────── */
+#static-burst {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  opacity: 0;
+  background: white;
+}
