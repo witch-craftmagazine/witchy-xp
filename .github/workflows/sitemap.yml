@@ -1,0 +1,38 @@
+name: Generate xml sitemap
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write   # 👈 THIS FIXES YOUR ERROR
+
+jobs:
+  sitemap_job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
+
+    - name: Generate the sitemap
+      id: sitemap
+      uses: cicirello/generate-sitemap@v1
+      with:
+        base-url-path: https://witch-craftmagazine.github.io/witchy-xp
+
+    - name: Commit sitemap
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add ${{ steps.sitemap.outputs.sitemap-path }}
+        git commit -m "Update sitemap" || echo "No changes to commit"
+        git push
+
+    - name: Output stats
+      run: |
+        echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
+        echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
+        echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
