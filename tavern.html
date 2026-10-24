@@ -51,14 +51,14 @@
     <div id="panorama-container"></div>
 
     <a
-      href="https://witch-craftmagazine.github.io/witchy-xp/outside"
+      href="./outside.html"
       class="button-left"
     >
       <img src="images/left.png" alt="Left Button" />
     </a>
 
     <a
-      href="https://witch-craftmagazine.github.io/witchy-xp/hallway"
+      href="./hallway.html"
       class="button-right"
     >
       <img src="images/right.png" alt="Right Button" />
@@ -163,5 +163,18 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
     </script>
-  </body>
+    <script src="audio.js"></script>
+  <script>
+    const startRoomAudio = () => {
+      if (window.witchyAudio) window.witchyAudio.startAmbience("synth");
+      window.removeEventListener("click", startRoomAudio);
+    };
+    window.addEventListener("click", startRoomAudio);
+    document.addEventListener("click", (e) => {
+      if (e.target.closest("a, button")) {
+        if (window.witchyAudio) window.witchyAudio.playClick();
+      }
+    });
+  </script>
+</body>
 </html>

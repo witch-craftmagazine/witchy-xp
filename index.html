@@ -52,6 +52,30 @@
 <!--                PAGE CONTENT                 -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="page">
+<!-- Desktop Icons Grid -->
+  <div class="xp-desktop-icons">
+    <div class="desktop-icon" onclick="openWindow('win-main')">
+      <img src="icons/world.png" alt="Deathcap Portal">
+      <span>Deathcap.exe</span>
+    </div>
+    <div class="desktop-icon" onclick="openWindow('win-notepad')">
+      <img src="icons/notepad.png" alt="Notepad">
+      <span>dreams.txt</span>
+    </div>
+    <div class="desktop-icon" onclick="window.location.href='./spyglass.html'">
+      <img src="icons/minecraft.png" alt="Spyglass">
+      <span>Spyglass Tavern</span>
+    </div>
+    <div class="desktop-icon" onclick="window.location.href='./lab/axolotl.html'">
+      <img src="icons/parsec.png" alt="CCTV">
+      <span>Link's Lab CCTV</span>
+    </div>
+    <div class="desktop-icon" onclick="openWindow('win-bin')">
+      <img src="icons/recycle_bin_full.png" alt="Recycle Bin">
+      <span>Recycle Bin</span>
+    </div>
+  </div>
+
 <!-- Spacer (creates hidden scroll area) -->
   <div class="top-spacer"></div>
   <!-- Site header -->
@@ -61,7 +85,7 @@
   </header>
 
   <!-- ── MAIN XP WINDOW ── -->
-  <div class="xp-window">
+  <div class="xp-window active" id="win-main" data-task-title="DEATHCAP ISLAND" data-task-icon="icons/briefcase.png">
 
     <!-- Title bar -->
     <div class="xp-titlebar">
@@ -73,10 +97,7 @@
       <div class="xp-controls">
         <button class="xp-btn xp-btn-min" title="Minimize">─</button>
         <button class="xp-btn xp-btn-max" title="Maximize">□</button>
-        <button class="xp-btn xp-btn-close" title="Close"
-          onclick="this.closest('.xp-window').style.opacity='0';
-                   this.closest('.xp-window').style.transform='scale(0.95)';
-                   setTimeout(()=>this.closest('.xp-window').style.display='none',200)">✕</button>
+        <button class="xp-btn xp-btn-close" title="Close">✕</button>
       </div>
     </div>
 
@@ -93,23 +114,23 @@
 
     <!-- Toolbar -->
     <div class="xp-toolbar">
-      <button class="xp-toolbar-btn">
+      <button class="xp-toolbar-btn" onclick="window.location.href='./spyglass.html';">
         <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 2L2 6h3v4h2V6h3z" fill="#444"/></svg>
         Back
       </button>
-      <button class="xp-toolbar-btn">
+      <button class="xp-toolbar-btn" onclick="window.location.href='./lab/axolotl.html';">
         <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 10L2 6h3V2h2v4h3z" fill="#444"/></svg>
         Fwd
       </button>
       <div class="xp-toolbar-sep"></div>
-      <button class="xp-toolbar-btn">
+      <button class="xp-toolbar-btn" onclick="window.location.reload();"> 
         <svg width="12" height="12" viewBox="0 0 12 12">
           <path d="M6 1a5 5 0 100 10A5 5 0 006 1zm0 1.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7z" fill="#444"/>
           <path d="M8.5 1L11 3.5 8 4z" fill="#ff71ce"/>
         </svg>
         Refresh
       </button>
-      <button class="xp-toolbar-btn">
+      <button class="xp-toolbar-btn" onclick="window.location.href='./index.html';">
         <svg width="12" height="12" viewBox="0 0 12 12">
           <path d="M2 2h8v8H2z" fill="none" stroke="#444" stroke-width="1"/>
           <path d="M4 5h4M4 7h3" stroke="#316ac5" stroke-width="1"/>
@@ -118,7 +139,7 @@
       </button>
       <div class="xp-toolbar-sep"></div>
       <button class="xp-toolbar-btn">
-        <img src="icons/clock.png" alt="briefcase" width="16" height="16">
+        <img src="icons/search.png" alt="briefcase" width="16" height="16">
         Search
       </button>
       <button class="xp-toolbar-btn">
@@ -136,7 +157,7 @@
       <span class="xp-addressbar-label">Address</span>
       <input class="xp-addressbar-input" type="text"
              value="http://deathcapisland.com" readonly/>
-      <button class="xp-go-btn">Go</button>
+      <button class="xp-go-btn" onclick="window.location.href='./spyglass.html';">Go</button>
     </div>
 
     <!-- Main content -->
@@ -212,8 +233,8 @@
 
       <!-- CTA buttons -->
       <div class="vp-cta-row">
-        <button class="vp-btn vp-btn-primary">BEGIN ASCENSION</button>
-        <button class="vp-btn vp-btn-secondary">DOWNLOAD BROCHURE.EXE</button>
+        <button class="vp-btn vp-btn-primary" onclick="window.location.href='./spyglass.html';">BEGIN ASCENSION</button>
+        <button class="vp-btn vp-btn-secondary" onclick="window.location.href='./lab/axolotl.html';">DOWNLOAD BROCHURE.EXE</button>
       </div>
 
     </div><!-- /.xp-content -->
@@ -236,6 +257,7 @@
           <path d="M5 2v10M9 2v10M2 5h10M2 9h10" stroke="#888" stroke-width="0.5" opacity="0.5"/>
           <circle cx="7" cy="7" r="1.5" fill="#b967ff"/>
         </svg>
+        <img id="tray-audio-toggle" src="icons/sounds.png" alt="Sound" width="14" height="14" style="cursor:pointer; image-rendering:pixelated; opacity:0.85;" title="Audio: Click to Mute / Unmute">
         <span id="tray-time" style="font-family:Tahoma,sans-serif; font-size:11px;"></span>
       </div>
     </div>
@@ -246,7 +268,7 @@
   <div class="windows-row">
 
     <!-- Memo window -->
-    <div class="xp-window" style="filter: drop-shadow(0 4px 20px rgba(255,113,206,0.2));">
+    <div class="xp-window" id="win-memo" data-task-title="INTERNAL MEMO" data-task-icon="icons/text_file.png" style="filter: drop-shadow(0 4px 20px rgba(255,113,206,0.2));">
       <div class="xp-titlebar">
         <div class="xp-icon">
           <svg viewBox="0 0 16 16" fill="none">
@@ -262,8 +284,7 @@
         <div class="xp-controls">
           <button class="xp-btn xp-btn-min">─</button>
           <button class="xp-btn xp-btn-max">□</button>
-          <button class="xp-btn xp-btn-close"
-            onclick="this.closest('.xp-window').style.display='none'">✕</button>
+          <button class="xp-btn xp-btn-close">✕</button>
         </div>
       </div>
       <div class="xp-content" style="padding: 20px 24px;">
@@ -281,7 +302,7 @@
     </div>
 
     <!-- System monitor window -->
-    <div class="xp-window" style="filter: drop-shadow(0 4px 20px rgba(1,205,254,0.2));">
+    <div class="xp-window" id="win-system" data-task-title="SYSTEM MONITOR" data-task-icon="icons/this_computer.png" style="filter: drop-shadow(0 4px 20px rgba(1,205,254,0.2));">
       <div class="xp-titlebar">
         <div class="xp-icon">
           <svg viewBox="0 0 16 16" fill="none">
@@ -297,8 +318,7 @@
         <div class="xp-controls">
           <button class="xp-btn xp-btn-min">─</button>
           <button class="xp-btn xp-btn-max">□</button>
-          <button class="xp-btn xp-btn-close"
-            onclick="this.closest('.xp-window').style.display='none'">✕</button>
+          <button class="xp-btn xp-btn-close">✕</button>
         </div>
       </div>
       <div class="xp-content" style="padding: 20px 24px;">
@@ -322,12 +342,196 @@
 
   </div><!-- /.windows-row -->
 
+  <!-- ── NOTEPAD DREAMS.TXT WINDOW (STARTS MINIMIZED) ── -->
+  <div class="xp-window" id="win-notepad" data-task-title="dreams.txt - Notepad" data-task-icon="icons/notepad.png" style="display:none; max-width:620px; position:fixed; top:140px; left:calc(50% - 310px); z-index:150;">
+    <div class="xp-titlebar">
+      <div class="xp-icon"><img src="icons/notepad.png" width="16" height="16"></div>
+      <span class="xp-title-text">dreams.txt - Notepad</span>
+      <div class="xp-controls">
+        <button class="xp-btn xp-btn-min">─</button>
+        <button class="xp-btn xp-btn-max">□</button>
+        <button class="xp-btn xp-btn-close">✕</button>
+      </div>
+    </div>
+    <div class="xp-menubar">
+      <div class="xp-menu-item">File</div>
+      <div class="xp-menu-item">Edit</div>
+      <div class="xp-menu-item">Format</div>
+      <div class="xp-menu-item">View</div>
+      <div class="xp-menu-item">Help</div>
+    </div>
+    <div class="xp-content" style="background:#fff; padding:0;">
+      <textarea style="width:100%; height:240px; border:none; resize:none; padding:12px; font-family:'Share Tech Mono', monospace; font-size:12px; line-height:1.6; outline:none; background:#fff; color:#111;">DEATHCAP BIOS // FIELD TRANSMISSION #89
+------------------------------------------------
+LOCATION: Link's Lab / Sub-Level 3
+ANOMALY: The axolotls appear to be transmitting byte sequences on 433.92 MHz.
+
+STARSWEETPEA'S NOTICE:
+If anyone finds my recovery compass, please deposit it in Spyglass Tavern. Link keeps attempting to brew potato soup in the brewing stand.
+
+SECURITY PROTOCOL:
+Do not open CAM-04 (VAMPIRE 2) during full moon cycles.
+Paradise.dll is NOT a corporate training module.
+Beneath the tavern floor lies a pool of turquoise water.
+------------------------------------------------
+[Log saved to NOSTALGIA RAM]</textarea>
+    </div>
+    <div class="xp-statusbar">
+      <div class="xp-status-panel">Ln 14, Col 1</div>
+      <div class="xp-status-panel">100%</div>
+      <div class="xp-status-panel">Windows (CRLF)</div>
+    </div>
+  </div>
+
+  <!-- ── RECYCLE BIN WINDOW ── -->
+  <div class="xp-window" id="win-bin" data-task-title="Recycle Bin" data-task-icon="icons/recycle_bin_full.png" style="display:none; max-width:560px; position:fixed; top:180px; left:calc(50% - 280px); z-index:150;">
+    <div class="xp-titlebar">
+      <div class="xp-icon"><img src="icons/recycle_bin_full.png" width="16" height="16"></div>
+      <span class="xp-title-text">Recycle Bin</span>
+      <div class="xp-controls">
+        <button class="xp-btn xp-btn-min">─</button>
+        <button class="xp-btn xp-btn-max">□</button>
+        <button class="xp-btn xp-btn-close">✕</button>
+      </div>
+    </div>
+    <div class="xp-toolbar">
+      <button class="xp-toolbar-btn" onclick="alert('Cannot empty Recycle Bin: Access denied by FERN ENTERPRISE.')">
+        <img src="icons/tools.png" width="14" height="14"> Empty Bin
+      </button>
+    </div>
+    <div class="xp-content" style="background:#fff; padding:20px; min-height:180px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:16px;">
+        <div style="text-align:center; cursor:pointer;" onclick="alert('CORRUPTED FILE: paradise.dll\nSize: 999.9 MB\nNote: Contains dimensional doorway code.')">
+          <img src="icons/program.png" width="32" height="32"><br>
+          <span style="font-family:Tahoma,sans-serif; font-size:11px; color:#222;">paradise.dll</span>
+        </div>
+        <div style="text-align:center; cursor:pointer;" onclick="alert('NOTE FRAGMENT:\n\"We found the poolrooms beneath the tavern floorboards.\"')">
+          <img src="icons/text_file.png" width="32" height="32"><br>
+          <span style="font-family:Tahoma,sans-serif; font-size:11px; color:#222;">shredded_memo.txt</span>
+        </div>
+        <div style="text-align:center; cursor:pointer;" onclick="window.location.href='./poolrooms/poolroom.html'">
+          <img src="icons/movies.png" width="32" height="32"><br>
+          <span style="font-family:Tahoma,sans-serif; font-size:11px; color:#222;">pool_surveillance.avi</span>
+        </div>
+      </div>
+    </div>
+    <div class="xp-statusbar">
+      <div class="xp-status-panel">3 objects</div>
+      <div class="xp-status-panel">1.24 GB</div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     © 1989–2089 DEATHCAP // ALL PARADIGMS RESERVED // NOT RESPONSIBLE FOR TEMPORAL PARADOXES
   </footer>
 
 </div><!-- /.page -->
 
+<!-- ═══════════════════════════════════════════ -->
+<!--           XP TASKBAR & START MENU           -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="xp-taskbar">
+  <button class="xp-start-btn" id="xp-start-btn">
+    <img src="icons/briefcase.png" alt="logo" width="16" height="16">
+    <span>start</span>
+  </button>
+  <div class="xp-taskbar-tasks" id="xp-taskbar-tasks"></div>
+  <div class="xp-tray">
+    <img id="tray-audio-toggle-taskbar" src="icons/sounds.png" alt="Sound" width="14" height="14" style="cursor:pointer; image-rendering:pixelated;" title="Audio: Click to Mute / Unmute">
+    <span id="tray-time-taskbar"></span>
+  </div>
+</div>
+
+<!-- XP Start Menu -->
+<div id="xp-start-menu" class="xp-start-menu" style="display:none;">
+  <div class="start-header">
+    <div class="start-avatar">🍄</div>
+    <div class="start-user">DEATHCAP ENTERPRISE</div>
+  </div>
+  <div class="start-body">
+    <div class="start-left">
+      <div class="start-item" onclick="openWindow('win-main'); toggleStartMenu(false);">
+        <img src="icons/world.png">
+        <div><strong>Deathcap Portal</strong><span>Internet Browser</span></div>
+      </div>
+      <div class="start-item" onclick="openWindow('win-notepad'); toggleStartMenu(false);">
+        <img src="icons/notepad.png">
+        <div><strong>dreams.txt</strong><span>Classified Notepad</span></div>
+      </div>
+      <div class="start-item" onclick="window.location.href='./spyglass.html'">
+        <img src="icons/minecraft.png">
+        <div><strong>Spyglass Tavern</strong><span>Liminal Outpost</span></div>
+      </div>
+      <div class="start-item" onclick="window.location.href='./lab/axolotl.html'">
+        <img src="icons/parsec.png">
+        <div><strong>Link's Lab CCTV</strong><span>Security Grid</span></div>
+      </div>
+      <div class="start-item" onclick="window.location.href='./poolrooms/poolroom.html'">
+        <img src="icons/movies.png">
+        <div><strong>Poolrooms Archive</strong><span>Classified Wet Sector</span></div>
+      </div>
+      <div class="start-sep"></div>
+      <div class="start-item" onclick="openWindow('win-bin'); toggleStartMenu(false);">
+        <img src="icons/recycle_bin_full.png">
+        <div><strong>Recycle Bin</strong><span>Corrupted Files</span></div>
+      </div>
+    </div>
+    <div class="start-right">
+      <div class="start-item-side" onclick="openWindow('win-memo'); toggleStartMenu(false);">
+        <img src="icons/text_file.png">
+        <span>Internal Memo</span>
+      </div>
+      <div class="start-item-side" onclick="openWindow('win-system'); toggleStartMenu(false);">
+        <img src="icons/this_computer.png">
+        <span>System Monitor</span>
+      </div>
+      <div class="start-item-side" onclick="if (window.witchyAudio) window.witchyAudio.playItemHover(Math.floor(Math.random()*6));">
+        <img src="icons/sounds.png">
+        <span>Synth Core 303</span>
+      </div>
+    </div>
+  </div>
+  <div class="start-footer">
+    <button class="start-footer-btn" onclick="openShutdownModal(); toggleStartMenu(false);">
+      <img src="icons/tools.png" width="16" height="16">
+      <span>Shut Down...</span>
+    </button>
+  </div>
+</div>
+
+<!-- Shutdown Dialog & Glitch Overlay -->
+<div id="xp-shutdown-screen" style="display:none;" class="xp-shutdown-overlay">
+  <div class="shutdown-dialog" id="shutdown-dialog">
+    <div class="xp-titlebar">
+      <span class="xp-title-text">Shut Down Windows</span>
+      <button class="xp-btn xp-btn-close" onclick="closeShutdownModal()">✕</button>
+    </div>
+    <div class="shutdown-body">
+      <img src="icons/tools.png" width="32" height="32" style="image-rendering:pixelated;">
+      <div style="flex:1;">
+        <p style="font-family:Tahoma, sans-serif; font-size:12px; margin-bottom:8px; color:#222;">What do you want the computer to do?</p>
+        <select id="shutdown-choice" style="width:100%; font-family:Tahoma,sans-serif; padding:3px; font-size:11px;">
+          <option value="shutdown">Shut down</option>
+          <option value="restart">Restart</option>
+          <option value="ascend">Ascend to Dreamscape</option>
+        </select>
+      </div>
+    </div>
+    <div class="shutdown-actions">
+      <button class="xp-dialog-btn" onclick="executeShutdown()">OK</button>
+      <button class="xp-dialog-btn" onclick="closeShutdownModal()">Cancel</button>
+    </div>
+  </div>
+  <div id="shutdown-blackout" class="shutdown-blackout" style="display:none;">
+    <div id="shutdown-text">It is now safe to turn off your computer.</div>
+    <button class="reboot-btn" onclick="rebootSystem()">REBOOT SYSTEM</button>
+  </div>
+</div>
+
+</div><!-- /.page -->
+
+<script src="audio.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
